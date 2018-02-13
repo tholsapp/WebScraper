@@ -23,7 +23,7 @@ class URLDataStructure:
 
   def __init__(self, url, y, m, d):
     self.url = url
-    published = date(int(y), month[m], int(d))
+    self.published = date(int(y), month[m], int(d))
 
   def get_url(self):
     return self.url
@@ -52,11 +52,7 @@ class URLDataStructure:
   def is_valid_url(self):
     """ Requirements specify to not crawl postings prior
         to Decemeber 1, 2014. """
-    if self.published < date(2014, 12, 1):
-      return True
-    else:
-      return False
-
+    return self.published <= date(2014, 12, 1)
 
 
 class PersonDataStructure:

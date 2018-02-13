@@ -19,18 +19,6 @@ class Scraper:
   def __init__(self):
     print('---   Starting CS122 Scraper   ---\n')
 
-  def find_all_urls(self):
-    las_url_ext = ''
-    for div in self.soup.find_all('span',{"class":"field-content"}):
-      if div is not None:
-        if div.a is not None:
-          last_url_ext = div.a.get('href')
-        else:
-          date = div.contents[0].split(" ")
-          self.url_dict[len(self.url_dict)] = URLDataStructure(last_url_ext, date[3], date[1], date[2][:-1])
-      else:
-        print 'Break --- No Content on this page'
-        break
 
   def collect_page_content(self, page_number):
     if(page_number == 0):
@@ -44,20 +32,44 @@ class Scraper:
     self.soup = BeautifulSoup(self.response.text, "html.parser")
 
 
+  def add_new_url(self, url, year, month, day):
+    self.url_dict[len(self.url_dict)] = URLDataStructure(url, year, month, day)
+
+  def collect_all_urls(self):
+    """ With the given data go through and find the
+        urls and publishing dates and store them in
+        dcitionary """
+    las_url_ext = ''
+    for div in self.soup.find_all('span',{"class":"field-content"}):
+      if div is not None:
+        if div.a is not None:
+          last_url_ext = div.a.get('href')
+        else:
+          date = div.contents[0].split(" ")
+          self.add_new_url(last_url_ext, date[3], date[1], date[2][:-1])
+      else:
+        print 'Break --- No Content on this page'
+        break
+
+  def find_all_urls(self):
+    """ With each page within range collect all urls """
+    for i in range(31):
+      self.collect_page_content(i)
+      self.collect_all_urls()
+      time.sleep(3) # So we don't flood their server with requests
+
+  def print_valid_urls(self):
+    for data in self.url_dict:
+      temp = self.url_dict[data]
+      if temp.is_valid_url():
+        print data, temp.get_url(), temp.get_date()
+
 
 if __name__ == '__main__':
 
   scraper = Scraper()
-  i = 0
-  for i in range(30,31):
-    time.sleep(2) # Respect urls we are scraping
-    scraper.collect_page_content(i)
-    scraper.find_all_urls()
-    i = i + 1
-
-  for urlds in scraper.url_dict:
-    print urlds, scraper.url_dict[urlds].get_url(), scraper.url_dict[urlds].get_date()
-
+  scraper.find_all_urls()
+  scraper.print_valid_urls()
 
   #wait_time = 5
 
