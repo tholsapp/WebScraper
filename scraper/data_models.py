@@ -49,7 +49,7 @@ class URLDataStructure:
   def set_year(self, year):
     self.year = year
 
-  def is_valid_url(self):
+  def is_valid(self):
     """ Requirements specify to not crawl postings prior
         to Decemeber 1, 2014. """
     return self.published <= date(2014, 12, 1)
