@@ -17,7 +17,7 @@ month = {
 }
 
 
-class URLDataStructure:
+class URL:
   url = ''
   published = date.today()
 
@@ -55,9 +55,23 @@ class URLDataStructure:
     return self.published <= date(2014, 12, 1)
 
 
-class PersonDataStructure:
-  first_name = ''
-  last_name = ''
+class Name:
+  first = ''
+  middle = ''
+  last = ''
 
-  def __init__(self):
-    print "Printing from class PersonalData"
+  def __init__(self, first, middle, last):
+    self.first = first
+    self.middle = middle
+    self.last = last
+
+  def __hash__(self):
+      return hash((self.first, self.last))
+
+  def __eq__(self, other):
+      return (self.first, self.last) == (other.first, other.last)
+
+  def __ne__(self, other):
+    # Not strictly necessary, but to avoid having both x==y and x!=y
+    # True at the same time
+    return not(self == other)
