@@ -17,13 +17,13 @@ month = {
 }
 
 
-class URLDataStructure:
+class URL:
   url = ''
   published = date.today()
 
   def __init__(self, url, y, m, d):
     self.url = url
-    published = date(int(y), month[m], int(d))
+    self.published = date(int(y), month[m], int(d))
 
   def get_url(self):
     return self.url
@@ -49,19 +49,29 @@ class URLDataStructure:
   def set_year(self, year):
     self.year = year
 
-  def is_valid_url(self):
+  def is_valid(self):
     """ Requirements specify to not crawl postings prior
         to Decemeber 1, 2014. """
-    if self.published < date(2014, 12, 1):
-      return True
-    else:
-      return False
+    return self.published <= date(2014, 12, 1)
 
 
+class Name:
+  first = ''
+  middle = ''
+  last = ''
 
-class PersonDataStructure:
-  first_name = ''
-  last_name = ''
+  def __init__(self, first, middle, last):
+    self.first = first
+    self.middle = middle
+    self.last = last
 
-  def __init__(self):
-    print "Printing from class PersonalData"
+  def __hash__(self):
+      return hash((self.first, self.last))
+
+  def __eq__(self, other):
+      return (self.first, self.last) == (other.first, other.last)
+
+  def __ne__(self, other):
+    # Not strictly necessary, but to avoid having both x==y and x!=y
+    # True at the same time
+    return not(self == other)
