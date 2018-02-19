@@ -33,10 +33,19 @@ class Scraper:
         captions = CaptionScraper(link).find_all_captions()
         self.name_dict = NameScraper(captions).find_all_names()
         time.sleep(0)
-    
-    for name in self.name_dict:
-      print self.name_dict[name], name.first, name.last
-    print len(self.name_dict)
+
+    with open('output.txt', 'w') as outfile:
+      for name in self.name_dict:
+        if name is not None \
+            and name.first is not None \
+            and name.last is not None:
+          string = ''
+          string += str(self.name_dict[name])
+          string += ' ' + name.first + ' ' + name.last + '\n'
+          string = string.encode('utf-8')
+          print self.name_dict[name], name.first, name.last
+          outfile.write(string)
+      print len(self.name_dict)
 
 
 if __name__ == '__main__':
