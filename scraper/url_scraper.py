@@ -34,7 +34,7 @@ class URLScraper:
   def url_find_all(self):
     """ With the given data go through and find the urls and
     publishing dates and store them in dcitionary """
-    for i in range(31):
+    for i in range(6,31):
       ext = ''
       self.url_update_content(i)     # update request content
       for div in self.soup.find_all('span',{"class":"field-content"}):

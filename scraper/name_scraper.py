@@ -8,7 +8,7 @@ class NameScraper:
 
   caption_list = []
   name_list = []
-  title_list = ['Mr.', 'Mrs.', 'Ms.', 'Doctor', 'Director',
+  title_list = ['Doctor', 'Director',
                 'Assistant', 'Professor', 'Producer', 'Dr.',
                 'Chef', 'C-CAP', 'Photographer', 'Executive',
                 'Artist', 'President']
@@ -82,14 +82,18 @@ class NameScraper:
     name_count = dict()
     for cap in self.caption_list:
       for segment in cap.split(','):
+        # Check for Mr. and Mrs. case
+        temps = segment.split()
+        if temps == 4:
+          # If true, append names to caption_list
+          if temps[0] == 'Mr.' and temps[2] == 'Mrs.' \
+              or temps[0] == 'Mrs.' and temps[2] == 'Mr.':
+            self.caption_list.append(temps[0] + ' ' + temps[3])
+            self.caption_list.append(tmemps[2] + ' ' + temps[3])
+        # parse names in caption_list
         name = self.parse_name(segment)
         if name not in name_count:
           name_count[name] = 1
         else:
           name_count[name] = name_count[name] + 1
-
-    #for name in name_count:
-      #if name is not None and name.first is not None and name.last is not None:
-        #print name.first, name.last , name_count[name]
-    #print len(name_count)
     return name_count
